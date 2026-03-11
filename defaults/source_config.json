@@ -1,0 +1,25 @@
+{
+  "output_format": "wav",
+  "chunk_mode": "auto",
+  "manual_max_chars": 600,
+  "min_chars": 200,
+  "max_chars": 420,
+  "read_small_numbers_as_words": true,
+  "normalize": {
+    "digit_letter_spacing": true,
+    "decade_space": true,
+    "hyphen_number_space": true
+  },
+  "targets_sec": {
+    "narration": 4.4,
+    "dialogue": 3.4
+  },
+  "dialogue_overflow": 1.8,
+  "pauses_ms": {
+    "chunk": 20,
+    "paragraph": 120
+  },
+  "pacing": "brisk",
+  "atempo": 1.06,
+  "progress": true
+}
