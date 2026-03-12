@@ -1,0 +1,3 @@
+D:/AI/AppProject/AudiobookCreator/native/native_tts_engine/build/CMakeFiles/native_tts_engine.dir
+D:/AI/AppProject/AudiobookCreator/native/native_tts_engine/build/CMakeFiles/ALL_BUILD.dir
+D:/AI/AppProject/AudiobookCreator/native/native_tts_engine/build/CMakeFiles/ZERO_CHECK.dir

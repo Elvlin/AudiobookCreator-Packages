@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <ProjectReference Include="..\App.Core\App.Core.csproj" />
+    <ProjectReference Include="..\App.Storage\App.Storage.csproj" />
+    <ProjectReference Include="..\App.Inference\App.Inference.csproj" />
+    <ProjectReference Include="..\App.Diagnostics\App.Diagnostics.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>AudiobookCreator</AssemblyName>
+    <AssemblyTitle>Audiobook Creator</AssemblyTitle>
+    <Product>Audiobook Creator</Product>
+    <Company>Elvlin</Company>
+    <Authors>Elvlin</Authors>
+    <Copyright>© Elvlin 2026</Copyright>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>..\..\audiobook_creator_icon.ico</ApplicationIcon>
+    <GenerateIntegrityManifest>false</GenerateIntegrityManifest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <ReleaseFlavor Condition="'$(ReleaseFlavor)' == ''">customer</ReleaseFlavor>
+    <ReleaseOutputDir Condition="'$(ReleaseFlavor)' == 'public_no_audiox'">$(MSBuildThisFileDirectory)..\..\public_release\AudiobookCreator_no_audiox\</ReleaseOutputDir>
+    <ReleaseOutputDir Condition="'$(ReleaseOutputDir)' == ''">$(MSBuildThisFileDirectory)..\..\customer_release\</ReleaseOutputDir>
+    <OutputPath>$(ReleaseOutputDir)</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\native_tts_engine\build\Release\native_tts_engine.dll">
+      <Link>native_tts_engine.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Resource Include="..\..\Icon\**\*.*">
+      <LinkBase>Icon</LinkBase>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="tmpmeta\**\*.cs" />
+    <Page Remove="tmpmeta\**\*.xaml" />
+    <ApplicationDefinition Remove="tmpmeta\**\*.xaml" />
+    <Resource Remove="tmpmeta\**\*" />
+    <None Remove="tmpmeta\**\*" />
+    <EmbeddedResource Remove="tmpmeta\**\*" />
+  </ItemGroup>
+
+  <Target Name="RemoveStaticLibsFromPublishItems" AfterTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.lib'" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="GenerateReleaseIntegrityManifest" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' and '$(GenerateIntegrityManifest)' == 'true'">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\generate_release_manifest.ps1&quot; -ReleaseDir &quot;$(ReleaseOutputDir)&quot;" />
+  </Target>
+
+</Project>

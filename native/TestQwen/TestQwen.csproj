@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>TestQwen</AssemblyName>
+    <!-- Run from customer_release so AppRoot and model paths are correct -->
+    <OutputPath Condition="'$(Configuration)' == 'Release'">$(MSBuildThisFileDirectory)..\..\customer_release\</OutputPath>
+    <AppendTargetFrameworkToOutputPath Condition="'$(Configuration)' == 'Release'">false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\App.Inference\App.Inference.csproj" />
+    <ProjectReference Include="..\App.Core\App.Core.csproj" />
+  </ItemGroup>
+</Project>

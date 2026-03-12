@@ -1,0 +1,10 @@
+^D:\AI\APPPROJECT\AUDIOBOOKCREATOR\NATIVE\NATIVE_TTS_ENGINE\BUILD\CMAKEFILES\29A6F57E6DC6C54DBDFB856A1F5D8C3B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/AI/AppProject/AudiobookCreator/native/native_tts_engine -BD:/AI/AppProject/AudiobookCreator/native/native_tts_engine/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/AI/AppProject/AudiobookCreator/native/native_tts_engine/build/native_tts_engine.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

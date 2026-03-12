@@ -1,0 +1,217 @@
+<Window x:Class="AudiobookCreator.SetupNetFx.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Audiobook Creator Setup"
+        Height="820"
+        Width="1120"
+        MinHeight="760"
+        MinWidth="1040"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F1E8">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.05*" MinWidth="280" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="2.55*" MinWidth="620" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Background="#1E3A2F" CornerRadius="22" Padding="24">
+            <StackPanel>
+                <TextBlock Text="Audiobook Creator"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#F8F3E8"
+                           TextWrapping="Wrap" />
+                <TextBlock Text="Setup" FontSize="18" Margin="0,4,0,24" Foreground="#D6E6DA" />
+                <TextBlock x:Name="StepIndicatorText" Text="Step 1 of 8" FontSize="14" Foreground="#C7DCCF" Margin="0,0,0,16" />
+                <StackPanel x:Name="StepListPanel">
+                    <TextBlock x:Name="StepWelcomeText" Text="1. Welcome" Foreground="#F8F3E8" Margin="0,0,0,10" FontWeight="SemiBold" />
+                    <TextBlock x:Name="StepLicenseText" Text="2. License" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                    <TextBlock x:Name="StepScanText" Text="3. PC Scan" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                    <TextBlock x:Name="StepModeText" Text="4. Install Mode" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                    <TextBlock x:Name="StepApiText" Text="5. API Setup" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                    <TextBlock x:Name="StepFolderText" Text="6. Install Folder" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                    <TextBlock x:Name="StepInstallText" Text="7. Download and Install" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                    <TextBlock x:Name="StepFinishText" Text="8. Finish" Foreground="#A8C3B4" Margin="0,0,0,10" />
+                </StackPanel>
+                <Border Background="#264B3D" CornerRadius="14" Margin="0,30,0,0" Padding="14">
+                    <StackPanel>
+                        <TextBlock Text="Current plan" FontWeight="Bold" Foreground="#F8F3E8" />
+                        <TextBlock x:Name="SidebarPlanText" Text="No package plan resolved yet." TextWrapping="Wrap" Margin="0,8,0,0" Foreground="#D6E6DA" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Background="#FFFDF8" CornerRadius="22" Padding="28">
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+                    <Button x:Name="BackButton" Content="Back" MinWidth="120" Padding="20,0" Height="42" Margin="0,0,12,0" Click="BackButton_OnClick" />
+                    <Button x:Name="NextButton" Content="Next" MinWidth="140" Padding="24,0" Height="42" Background="#355E4E" Foreground="White" Click="NextButton_OnClick" />
+                </StackPanel>
+
+                <Grid>
+                    <Grid x:Name="WelcomePanel">
+                        <StackPanel>
+                            <TextBlock Text="Welcome" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                            <TextBlock Text="This setup will install Audiobook Creator and download only the components needed for your PC and chosen features."
+                                       Margin="0,12,0,0" FontSize="16" TextWrapping="Wrap" />
+                            <Border Background="#F2E9D5" CornerRadius="16" Padding="18" Margin="0,24,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="What this setup will do" FontSize="18" FontWeight="SemiBold" Foreground="#5A4C2A" />
+                                    <TextBlock Text="* Scan your PC and detect supported local model paths&#x0a;* Let you choose Auto or Custom install mode&#x0a;* Optionally save your API key now&#x0a;* Download package files from the official release feed&#x0a;* Verify SHA-256 before extraction&#x0a;* Install Audiobook Creator to the folder you choose"
+                                               Margin="0,12,0,0" TextWrapping="Wrap" FontSize="15" />
+                                </StackPanel>
+                            </Border>
+                            <TextBlock Text="The setup product name stays Audiobook Creator. Internal package names are not shown to end users."
+                                       Margin="0,18,0,0" FontSize="14" Foreground="#5E5A4F" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="LicensePanel" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="License Agreement" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                        <TextBox x:Name="LicenseTextBox" Grid.Row="1" Margin="0,18,0,0" IsReadOnly="True" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" />
+                        <CheckBox x:Name="AcceptLicenseCheckBox" Grid.Row="2" Margin="0,18,0,0"
+                                  Content="I agree to the Audiobook Creator license agreement."
+                                  Checked="AcceptLicenseCheckBox_OnChanged"
+                                  Unchecked="AcceptLicenseCheckBox_OnChanged" />
+                    </Grid>
+
+                    <Grid x:Name="ScanPanel" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="PC Scan" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                        <TextBlock x:Name="ScanStatusText" Grid.Row="1" Margin="0,12,0,0" Text="Scanning your PC..." FontSize="16" Foreground="#5A4C2A" />
+                        <Button Grid.Row="2" MinWidth="160" Padding="18,0" Height="38" Margin="0,16,0,0" HorizontalAlignment="Left" Content="Scan Again" Click="ScanAgainButton_OnClick" />
+                        <Border Grid.Row="3" Margin="0,18,0,0" Background="#F7F5EF" CornerRadius="14" Padding="16">
+                            <TextBlock x:Name="ScanDetailsText" TextWrapping="Wrap" FontFamily="Consolas" FontSize="14" />
+                        </Border>
+                    </Grid>
+
+                    <ScrollViewer x:Name="ModePanel" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="Install Mode" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                            <TextBlock Text="Choose whether setup should decide the model package set automatically or let you choose manually."
+                                       Margin="0,12,0,0" FontSize="16" TextWrapping="Wrap" />
+                            <StackPanel Orientation="Horizontal" Margin="0,22,0,0">
+                                <RadioButton x:Name="AutoModeRadio" Content="Auto" GroupName="InstallMode" Margin="0,0,30,0" Checked="ModeInputs_OnChanged" />
+                                <RadioButton x:Name="CustomModeRadio" Content="Custom" GroupName="InstallMode" Checked="ModeInputs_OnChanged" />
+                            </StackPanel>
+                            <CheckBox x:Name="ApiOnlyCheckBox" Margin="0,22,0,0"
+                                      Content="API-only install (skip all local model downloads)"
+                                      Checked="ModeInputs_OnChanged"
+                                      Unchecked="ModeInputs_OnChanged" />
+                            <Border x:Name="CustomOptionsBorder" Background="#F7F5EF" CornerRadius="14" Padding="16" Margin="0,22,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Custom local model choices" FontSize="18" FontWeight="SemiBold" Foreground="#21352D" />
+                                    <Grid Margin="0,16,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.1*" MinWidth="150" />
+                                            <ColumnDefinition Width="1.1*" MinWidth="170" />
+                                            <ColumnDefinition Width="1.8*" MinWidth="220" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Chatterbox" VerticalAlignment="Center" />
+                                        <ComboBox x:Name="ChatterboxBackendCombo" Grid.Column="1" SelectionChanged="ModeInputs_OnChanged" />
+                                        <TextBlock x:Name="ChatterboxWarningText" Grid.Column="2" Margin="18,0,0,0" Foreground="#9C4A1A" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <Grid Margin="0,14,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.1*" MinWidth="150" />
+                                            <ColumnDefinition Width="1.1*" MinWidth="170" />
+                                            <ColumnDefinition Width="1.8*" MinWidth="220" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Kitten" VerticalAlignment="Center" />
+                                        <ComboBox x:Name="KittenBackendCombo" Grid.Column="1" SelectionChanged="ModeInputs_OnChanged" />
+                                        <TextBlock x:Name="KittenWarningText" Grid.Column="2" Margin="18,0,0,0" Foreground="#9C4A1A" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <CheckBox x:Name="QwenCheckBox" Margin="0,18,0,0" Content="Include Qwen local support" Checked="ModeInputs_OnChanged" Unchecked="ModeInputs_OnChanged" />
+                                    <TextBlock x:Name="QwenWarningText" Foreground="#9C4A1A" Margin="24,4,0,0" TextWrapping="Wrap" />
+                                    <CheckBox x:Name="LlmCheckBox" Margin="0,18,0,0" Content="Include local LLM script prep" Checked="ModeInputs_OnChanged" Unchecked="ModeInputs_OnChanged" />
+                                    <TextBlock x:Name="LlmWarningText" Foreground="#9C4A1A" Margin="24,4,0,0" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#E8F0EB" CornerRadius="14" Padding="16" Margin="0,22,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Resolved install plan" FontSize="18" FontWeight="SemiBold" Foreground="#214034" />
+                                    <TextBlock x:Name="PlanSummaryText" Margin="0,12,0,0" TextWrapping="Wrap" FontSize="15" />
+                                    <TextBlock x:Name="PlanWarningsText" Margin="0,12,0,0" Foreground="#8B3D14" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <Grid x:Name="ApiPanel" Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock Text="API Setup" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                            <TextBlock Text="You can enter an API key now or skip this step and add it later inside Audiobook Creator."
+                                       Margin="0,12,0,0" FontSize="16" TextWrapping="Wrap" />
+                            <CheckBox x:Name="EnterApiKeyCheckBox" Margin="0,22,0,0" Content="Enter API key during setup" Checked="ApiInputs_OnChanged" Unchecked="ApiInputs_OnChanged" />
+                            <StackPanel x:Name="ApiEntryPanel" Margin="0,18,0,0">
+                                <TextBlock Text="Provider" FontWeight="SemiBold" />
+                                <ComboBox x:Name="ApiProviderCombo" MinWidth="240" MaxWidth="360" HorizontalAlignment="Left" Margin="0,8,0,0" SelectionChanged="ApiInputs_OnChanged" />
+                                <TextBlock Text="API key" FontWeight="SemiBold" Margin="0,18,0,0" />
+                                <PasswordBox x:Name="ApiKeyPasswordBox" Margin="0,8,0,0" Height="34" PasswordChanged="ApiKeyPasswordBox_OnChanged" />
+                            </StackPanel>
+                            <Border Background="#F2E9D5" CornerRadius="14" Padding="16" Margin="0,22,0,0">
+                                <TextBlock Text="API mode uses online voice providers. If you do not know where to get a key yet, skip this step now and enter it later in the app settings. Saved keys stay masked and are not written to the plain config file."
+                                           TextWrapping="Wrap" FontSize="15" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="FolderPanel" Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock Text="Install Folder" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                            <TextBlock Text="Choose where Audiobook Creator should be installed. Setup will validate the path and available disk space."
+                                       Margin="0,12,0,0" FontSize="16" TextWrapping="Wrap" />
+                            <TextBlock Text="Install location" Margin="0,22,0,0" FontWeight="SemiBold" />
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="InstallDirectoryTextBox" Height="34" VerticalContentAlignment="Center" TextChanged="InstallDirectoryTextBox_OnTextChanged" />
+                                <Button Grid.Column="1" MinWidth="140" Padding="18,0" Margin="12,0,0,0" Content="Browse..." Click="BrowseButton_OnClick" />
+                            </Grid>
+                            <Border Background="#F7F5EF" CornerRadius="14" Padding="16" Margin="0,22,0,0">
+                                <TextBlock x:Name="InstallFolderStatusText" TextWrapping="Wrap" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="InstallPanel" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Download and Install" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                        <TextBlock x:Name="InstallSummaryText" Grid.Row="1" Margin="0,12,0,0" FontSize="16" TextWrapping="Wrap" />
+                        <ProgressBar x:Name="InstallProgressBar" Grid.Row="2" Margin="0,20,0,0" Height="22" Minimum="0" Maximum="100" />
+                        <TextBox x:Name="InstallLogTextBox" Grid.Row="3" Margin="0,18,0,0" IsReadOnly="True" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" />
+                    </Grid>
+
+                    <Grid x:Name="FinishPanel" Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock Text="Setup Complete" FontSize="30" FontWeight="Bold" Foreground="#21352D" />
+                            <TextBlock x:Name="FinishSummaryText" Margin="0,14,0,0" FontSize="16" TextWrapping="Wrap" />
+                            <CheckBox x:Name="LaunchAfterSetupCheckBox" Margin="0,24,0,0" IsChecked="True" Content="Launch Audiobook Creator when I close setup" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

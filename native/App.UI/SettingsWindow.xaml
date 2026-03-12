@@ -1,0 +1,723 @@
+<Window x:Class="AudiobookCreator.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings"
+        Width="700"
+        Height="620"
+        WindowStartupLocation="CenterOwner"
+        Background="#F4F6F5"
+        ResizeMode="CanMinimize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+            <TabItem Header="Simple">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                <Border Background="White" BorderBrush="#E1E6E3" BorderThickness="1" CornerRadius="12" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="Runtime Settings" FontSize="16" FontWeight="SemiBold" />
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*" MinWidth="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Backend Mode" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <ComboBox x:Name="BackendModeCombo" Grid.Column="1" Height="34" Visibility="Collapsed">
+                                <ComboBoxItem>local</ComboBoxItem>
+                                <ComboBoxItem>api</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock Grid.Row="1" Text="Default Output Folder" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid Grid.Row="1" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="DefaultOutputDirTextBox" Height="34" />
+                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="90" Padding="16,0" Content="Browse" Click="BrowseDefaultOutputDir_OnClick" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="2" Text="Model Preset" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="LocalModelPresetCombo"
+                                          Height="34"
+                                          SelectionChanged="LocalModelPresetCombo_OnSelectionChanged">
+                                    <ComboBoxItem x:Name="ChatterboxPresetItem" Tag="chatterbox_onnx">[ ] Chatterbox ONNX</ComboBoxItem>
+                                    <ComboBoxItem x:Name="QwenPresetItem" Tag="qwen3_tts">[ ] Qwen3 TTS</ComboBoxItem>
+                                    <ComboBoxItem x:Name="KittenPresetItem" Tag="kitten_tts">[ ] Kitten TTS Mini 0.8</ComboBoxItem>
+                                    <ComboBoxItem Tag="api_openai_default">API - OpenAI TTS</ComboBoxItem>
+                                    <ComboBoxItem Tag="api_alibaba">API - Alibaba Qwen</ComboBoxItem>
+                                </ComboBox>
+                                <Button x:Name="ModelControlsButton"
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        MinWidth="120"
+                                        Padding="18,0"
+                                        Content="Settings"
+                                        Click="ModelControlsButton_OnClick" />
+                            </Grid>
+
+                            <TextBlock x:Name="QwenVariantLabel" Grid.Row="3" Text="Qwen Variant" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="QwenVariantCombo"
+                                      Grid.Row="3"
+                                      Grid.Column="1"
+                                      Margin="0,10,0,0"
+                                      Height="34"
+                                      SelectionChanged="QwenVariantCombo_OnSelectionChanged" />
+
+                            <TextBlock x:Name="LocalBackendLabel"
+                                       Grid.Row="4"
+                                       Text="Model Backend"
+                                       Margin="0,10,0,0"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed" />
+                            <StackPanel Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="0,10,0,0"
+                                        Visibility="Collapsed"
+                                        x:Name="LocalBackendPanel">
+                                <ComboBox x:Name="LocalModelBackendCombo"
+                                          Height="34"
+                                          SelectionChanged="LocalModelBackendCombo_OnSelectionChanged">
+                                    <ComboBoxItem Tag="onnx">ONNX (NVIDIA)</ComboBoxItem>
+                                    <ComboBoxItem Tag="python">Python</ComboBoxItem>
+                                </ComboBox>
+                                <TextBlock x:Name="LocalBackendHintTextBlock"
+                                           Margin="0,6,0,0"
+                                           Foreground="#5B6661"
+                                           TextWrapping="Wrap"
+                                           Text="" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Margin="0,12,0,0">
+                                <CheckBox x:Name="AutoDownloadModelCheckBox"
+                                          Content="Auto-download model if missing" />
+                                <CheckBox x:Name="AutoRemoveInputFilesCheckBox"
+                                          Margin="0,6,0,0"
+                                          Content="Auto-remove completed input files after generation" />
+                                <CheckBox x:Name="GenerateSrtSubtitlesCheckBox"
+                                          Margin="0,6,0,0"
+                                          Content="Generate .srt subtitle file for each output audio" />
+                                <CheckBox x:Name="GenerateAssSubtitlesCheckBox"
+                                          Margin="0,6,0,0"
+                                          Content="Generate .ass subtitle file for each output audio" />
+                            </StackPanel>
+
+                            <TextBlock x:Name="RecommendedLabel" Grid.Row="9" Text="Recommended" Margin="0,10,0,0" VerticalAlignment="Top" />
+                            <StackPanel Grid.Row="9" Grid.Column="1" Margin="0,10,0,0">
+                                <TextBlock x:Name="RecommendedTierTextBlock"
+                                           Foreground="#2F3A34"
+                                           TextWrapping="Wrap"
+                                           Text="Detecting PC profile..." />
+                                <TextBlock x:Name="QwenChunkLimitsTextBlock"
+                                           Margin="0,6,0,0"
+                                           Foreground="#2F3A34"
+                                           TextWrapping="Wrap"
+                                           Visibility="Collapsed"
+                                           Text="" />
+                            </StackPanel>
+
+                            <TextBlock x:Name="ChecklistLabel" Grid.Row="10" Text="Checklist" Margin="0,10,0,0" VerticalAlignment="Top" />
+                            <StackPanel Grid.Row="10" Grid.Column="1" Margin="0,10,0,0">
+                                <CheckBox x:Name="MainRepoInstalledCheckBox" Content="Main model files installed" IsEnabled="False" />
+                                <CheckBox x:Name="TokenizerInstalledCheckBox" Content="Tokenizer files installed" IsEnabled="False" Margin="0,4,0,0" />
+                                <CheckBox x:Name="RamRequirementCheckBox" Content="RAM requirement" IsEnabled="False" Margin="0,4,0,0" />
+                                <CheckBox x:Name="VramRequirementCheckBox" Content="VRAM requirement" IsEnabled="False" Margin="0,4,0,0" />
+                                <CheckBox x:Name="DiskRequirementCheckBox" Content="Disk requirement" IsEnabled="False" Margin="0,4,0,0" />
+                            </StackPanel>
+
+                            <StackPanel x:Name="QwenPythonRuntimePanel"
+                                        Grid.Row="11"
+                                        Grid.Column="1"
+                                        Margin="0,12,0,0"
+                                        Visibility="Collapsed">
+                                <Border Background="#EEF4F0" BorderBrush="#D7E3DB" BorderThickness="1" CornerRadius="8" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Qwen Runtime"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#2F3A34" />
+                                        <TextBlock x:Name="QwenPythonRuntimeNoteTextBlock"
+                                                   Margin="0,4,0,0"
+                                                   Foreground="#4A5851"
+                                                   TextWrapping="Wrap"
+                                                   Text="Qwen uses bundled Python runtime at customer_release\python_qwen (isolated from system Python)." />
+                                        <TextBlock x:Name="QwenPythonRuntimeVerifyTextBlock"
+                                                   Margin="0,6,0,0"
+                                                   Foreground="#4F7D63"
+                                                   TextWrapping="Wrap"
+                                                   Text="Not checked yet." />
+                                    </StackPanel>
+                                </Border>
+                                <Button x:Name="VerifyQwenRuntimeButton"
+                                        Margin="0,8,0,0"
+                                        Height="34"
+                                        MinWidth="150"
+                                        Padding="18,0"
+                                        HorizontalAlignment="Left"
+                                        Content="Verify Qwen Runtime"
+                                        Click="VerifyQwenRuntimeButton_OnClick" />
+                            </StackPanel>
+
+                            <Grid Grid.Row="12" Grid.Column="1" Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="DownloadModelButton"
+                                        Grid.Column="0"
+                                        Height="34"
+                                        MinWidth="0"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="0,0,8,0"
+                                        Content="Download Model Now"
+                                        Click="DownloadModelButton_OnClick" />
+                                <Button x:Name="RefreshModelStatusButton"
+                                        Grid.Column="1"
+                                        Margin="0,0,8,0"
+                                        Height="34"
+                                        MinWidth="0"
+                                        HorizontalAlignment="Stretch"
+                                        Content="Refresh"
+                                        Click="RefreshModelStatusButton_OnClick" />
+                                <Button x:Name="RemoveModelCacheButton"
+                                        Grid.Column="2"
+                                        Margin="0,0,0,0"
+                                        Height="34"
+                                        MinWidth="0"
+                                        HorizontalAlignment="Stretch"
+                                        Content="Remove Cache"
+                                        Click="RemoveModelCacheButton_OnClick" />
+                            </Grid>
+                            <StackPanel Grid.Row="13" Grid.Column="1" Margin="0,8,0,0">
+                                <ProgressBar x:Name="DownloadProgressBar"
+                                             Height="6"
+                                             IsIndeterminate="True"
+                                             Visibility="Collapsed" />
+                                <TextBlock x:Name="DownloadMetricsTextBlock"
+                                           Margin="0,6,0,0"
+                                           Foreground="#2F3A34"
+                                           Text="Idle" />
+                                <TextBlock x:Name="DownloadCurrentFileTextBlock"
+                                           Margin="0,4,0,0"
+                                           Foreground="#5B6661"
+                                           Text="No active download"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="14" Grid.Column="1" Margin="0,6,0,0">
+                                <TextBlock x:Name="RuntimeStatusTextBlock"
+                                           Margin="0,0,0,0"
+                                           Foreground="#4F7D63"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,16,0,0" Background="White" BorderBrush="#E1E6E3" BorderThickness="1" CornerRadius="12" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="API Settings" FontSize="16" FontWeight="SemiBold" />
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*" MinWidth="160" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Alibaba Key" VerticalAlignment="Center" />
+                            <PasswordBox x:Name="ApiKeyAlibabaPasswordBox" Grid.Column="1" Height="34" PasswordChanged="ApiKeyPasswordBox_OnChanged" />
+                            <Button x:Name="ClearAlibabaApiKeyButton"
+                                    Grid.Column="2"
+                                    Margin="8,0,0,0"
+                                    Height="34"
+                                    MinWidth="110"
+                                    Padding="18,0"
+                                    Content="Remove"
+                                    Click="ClearAlibabaApiKeyButton_OnClick" />
+                            <TextBlock x:Name="ApiKeyAlibabaStatusTextBlock"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Margin="0,6,0,0"
+                                       Foreground="#5B6661"
+                                       TextWrapping="Wrap"
+                                       Text="Alibaba key not configured." />
+
+                            <TextBlock Grid.Row="2" Text="OpenAI Key" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <PasswordBox x:Name="ApiKeyOpenAiPasswordBox" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Height="34" PasswordChanged="ApiKeyPasswordBox_OnChanged" />
+                            <Button x:Name="ClearOpenAiApiKeyButton"
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Margin="8,10,0,0"
+                                    Height="34"
+                                    MinWidth="110"
+                                    Padding="18,0"
+                                    Content="Remove"
+                                    Click="ClearOpenAiApiKeyButton_OnClick" />
+                            <TextBlock x:Name="ApiKeyOpenAiStatusTextBlock"
+                                       Grid.Row="3"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Margin="0,6,0,0"
+                                       Foreground="#5B6661"
+                                       TextWrapping="Wrap"
+                                       Text="OpenAI key not configured." />
+
+                            <TextBlock Grid.Row="4" Text="OpenAI TTS Model" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="OpenAiTtsModelCombo" Height="34" />
+                                <Button x:Name="FetchOpenAiTtsModelsButton"
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Height="34"
+                                        MinWidth="120"
+                                        Padding="18,0"
+                                        Content="Fetch"
+                                        Click="FetchOpenAiTtsModelsButton_OnClick" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="5" Text="Alibaba TTS Model" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <Grid Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="AlibabaTtsModelCombo" Height="34" />
+                                <Button x:Name="FetchAlibabaTtsModelsButton"
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Height="34"
+                                        MinWidth="120"
+                                        Padding="18,0"
+                                        Content="Fetch"
+                                        Click="FetchAlibabaTtsModelsButton_OnClick" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="6" Grid.ColumnSpan="3" Margin="0,8,0,0" Foreground="#5B6661" TextWrapping="Wrap"
+                                       Text="Saved API keys stay masked. Leave a field blank to keep the current key, enter a new value to replace it, or use Remove to delete it." />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Advanced">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+
+                <Border Background="White" BorderBrush="#E1E6E3" BorderThickness="1" CornerRadius="12" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="Runtime Overrides" FontSize="16" FontWeight="SemiBold" />
+                        <TextBlock Margin="0,6,0,0" Foreground="#5B6661" TextWrapping="Wrap"
+                                   Text="Only change these if you want a different local model folder, different device, or custom repo/runtime layout." />
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*" MinWidth="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="ModelRepoLabel" Text="Model Repo" VerticalAlignment="Center" />
+                            <TextBox x:Name="ModelRepoTextBox" Grid.Column="1" Height="34" TextChanged="ModelConfigTextChanged_OnChanged" />
+
+                            <TextBlock x:Name="TokenizerRepoLabel" Grid.Row="1" Text="Tokenizer Repo" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <TextBox x:Name="AdditionalRepoTextBox" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Height="34" TextChanged="ModelConfigTextChanged_OnChanged" />
+
+                            <TextBlock x:Name="LocalModelFolderLabel" Grid.Row="2" Text="Local Model Folder" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid x:Name="LocalModelFolderGrid" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="ModelCacheTextBox" Height="34" TextChanged="ModelConfigTextChanged_OnChanged" />
+                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="90" Padding="16,0" Content="Browse" Click="BrowseModelCache_OnClick" />
+                            </Grid>
+
+                            <TextBlock x:Name="LocalDeviceLabel" Grid.Row="3" Text="Local Device" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="LocalDeviceCombo" Grid.Row="3" Grid.Column="1" Margin="0,10,0,0" Height="34">
+                                <ComboBoxItem>auto</ComboBoxItem>
+                                <ComboBoxItem>cpu</ComboBoxItem>
+                                <ComboBoxItem>gpu</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,0,0,0" Background="White" BorderBrush="#E1E6E3" BorderThickness="1" CornerRadius="12" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="LLM Script Prep" FontSize="16" FontWeight="SemiBold" />
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*" MinWidth="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Provider" VerticalAlignment="Center" />
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="LlmProviderCombo" Height="34">
+                                    <ComboBoxItem>local</ComboBoxItem>
+                                    <ComboBoxItem>openai</ComboBoxItem>
+                                    <ComboBoxItem>alibaba</ComboBoxItem>
+                                </ComboBox>
+                                <Button x:Name="FetchLlmModelsButton"
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Height="34"
+                                        Content="Fetch Models"
+                                        Click="FetchLlmModelsButton_OnClick"
+                                        Visibility="Collapsed" />
+                            </Grid>
+
+                            <CheckBox x:Name="LlmSeparateModelsCheckBox"
+                                      Grid.Row="1"
+                                      Grid.Column="1"
+                                      Margin="0,8,0,0"
+                                      Content="Use separate models (split + instruction)"
+                                      IsChecked="True" />
+
+                            <CheckBox x:Name="LlmAdvancedToggleCheckBox"
+                                      Grid.Row="1"
+                                      Grid.Column="1"
+                                      Margin="280,8,0,0"
+                                      Content="Advanced"
+                                      Visibility="Collapsed"
+                                      IsChecked="True"
+                                      Checked="LlmAdvancedToggleCheckBox_OnChanged"
+                                      Unchecked="LlmAdvancedToggleCheckBox_OnChanged" />
+
+                            <TextBlock Grid.Row="2" Text="Split Model" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="LlmSplitModelCombo" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Height="34">
+                                <ComboBoxItem>qwen2.5-7b-instruct</ComboBoxItem>
+                                <ComboBoxItem>qwen3-8b-instruct</ComboBoxItem>
+                                <ComboBoxItem>gpt-4.1-mini</ComboBoxItem>
+                                <ComboBoxItem>qwen-max</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock Grid.Row="3" Text="Instruction Model" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="LlmInstructionModelCombo" Grid.Row="3" Grid.Column="1" Margin="0,10,0,0" Height="34">
+                                <ComboBoxItem>qwen2.5-14b-instruct</ComboBoxItem>
+                                <ComboBoxItem>qwen3-14b-instruct</ComboBoxItem>
+                                <ComboBoxItem>gpt-4.1</ComboBoxItem>
+                                <ComboBoxItem>qwen-plus</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock x:Name="LlmRuntimePathLabel" Grid.Row="4" Text="Local Runtime Path" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <Grid x:Name="LlmRuntimePathGrid" Grid.Row="4" Grid.Column="1" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="LlmRuntimePathTextBox" Height="34" />
+                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="90" Padding="16,0" Content="Browse" Click="BrowseLlmRuntimePath_OnClick" />
+                            </Grid>
+
+                            <TextBlock x:Name="LlmModelDirLabel" Grid.Row="5" Text="Local Model Folder" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <Grid x:Name="LlmModelDirGrid" Grid.Row="5" Grid.Column="1" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="LlmModelDirTextBox" Height="34" />
+                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="90" Padding="16,0" Content="Browse" Click="BrowseLlmModelDir_OnClick" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="8" Text="Split Temp/MaxTok" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid Grid.Row="8" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="LlmSplitTempTextBox" Height="34" />
+                                <TextBox x:Name="LlmSplitMaxTokensTextBox" Grid.Column="2" Height="34" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="9" Text="Instr Temp/MaxTok" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid Grid.Row="9" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="LlmInstructionTempTextBox" Height="34" />
+                                <TextBox x:Name="LlmInstructionMaxTokensTextBox" Grid.Column="2" Height="34" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="10" Text="Checklist" Margin="0,10,0,0" VerticalAlignment="Top" />
+                            <StackPanel Grid.Row="10" Grid.Column="1" Margin="0,10,0,0">
+                                <CheckBox x:Name="LlmProviderReadyCheckBox" IsEnabled="False" Content="Provider/API key ready" />
+                                <CheckBox x:Name="LlmRamReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="RAM requirement" />
+                                <CheckBox x:Name="LlmVramReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="VRAM requirement" />
+                                <CheckBox x:Name="LlmRuntimeReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="Local runtime executable found" />
+                                <CheckBox x:Name="LlmSplitModelReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="Split model file found" />
+                                <CheckBox x:Name="LlmInstructionModelReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="Instruction model file found" />
+                                <CheckBox x:Name="LlmDiskReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="Disk space looks sufficient for local GGUF files" />
+                            </StackPanel>
+
+                            <Grid Grid.Row="11" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="InstallLlmNowButton"
+                                        Grid.Column="0"
+                                        Height="34"
+                                        Margin="0,0,8,0"
+                                        MinWidth="220"
+                                        Padding="18,0"
+                                        Content="Install LLM Now"
+                                        Click="InstallLlmNowButton_OnClick" />
+                                <CheckBox x:Name="LlmForceRedownloadCheckBox"
+                                          Grid.Column="1"
+                                          VerticalAlignment="Center"
+                                          Content="Force re-download" />
+                                <Button x:Name="CancelLlmInstallButton"
+                                        Grid.Column="2"
+                                        Height="34"
+                                        Margin="8,0,0,0"
+                                        MinWidth="120"
+                                        Padding="18,0"
+                                        Content="Cancel"
+                                        IsEnabled="False"
+                                        Click="CancelLlmInstallButton_OnClick" />
+                            </Grid>
+                        </Grid>
+                        <StackPanel Margin="0,8,0,0">
+                            <ProgressBar x:Name="LlmInstallProgressBar"
+                                         Height="6"
+                                         IsIndeterminate="False"
+                                         Value="0" />
+                            <TextBlock x:Name="LlmInstallMetricsTextBlock"
+                                       Margin="0,6,0,0"
+                                       Foreground="#2F3A34"
+                                       Text="Idle" />
+                            <TextBlock x:Name="LlmInstallCurrentFileTextBlock"
+                                       Margin="0,4,0,0"
+                                       Foreground="#5B6661"
+                                       Text="No active install"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBlock x:Name="LlmRuntimeStatusTextBlock"
+                                   Margin="0,8,0,0"
+                                   Foreground="#5B6661"
+                                   TextWrapping="Wrap"
+                                   Text="LLM runtime status: not checked." />
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="VoiceTranscriptSection" Margin="0,16,0,0" Background="White" BorderBrush="#E1E6E3" BorderThickness="1" CornerRadius="12" Padding="16" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Voice (Qwen)" FontSize="16" FontWeight="SemiBold" />
+                        <TextBlock x:Name="VoiceTranscriptTargetLabel" Margin="0,8,0,0" Foreground="#4F7D63" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap" />
+                        <TextBlock x:Name="VoiceTranscriptSectionLabel" Margin="0,6,0,4" Foreground="#2F3A34" FontSize="12" Text="Transcript saved as .ref.txt next to the selected voice file." TextWrapping="Wrap" />
+                        <ComboBox x:Name="VoiceTranscriptVoiceCombo"
+                                  Margin="0,0,0,8"
+                                  Height="34"
+                                  SelectionChanged="VoiceTranscriptVoiceCombo_OnSelectionChanged" />
+                        <TextBox x:Name="VoiceTranscriptTextBox" Margin="0,0,0,8" MinHeight="72" MaxHeight="160" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                        <Button x:Name="SaveVoiceTranscriptButton" MinWidth="140" Padding="18,0" HorizontalAlignment="Left" Content="Save transcript to voice" Click="SaveVoiceTranscriptButton_OnClick" />
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="AudioEnhancementSection" Margin="0,16,0,0" Background="White" BorderBrush="#E1E6E3" BorderThickness="1" CornerRadius="12" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="Audio Enhancement (AudioX)" FontSize="16" FontWeight="SemiBold" />
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*" MinWidth="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Provider" VerticalAlignment="Center" />
+                            <ComboBox x:Name="AudioEnhanceProviderCombo" Grid.Column="1" Height="34">
+                                <ComboBoxItem Tag="local_audiox">Local AudioX</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock Grid.Row="1" Text="Variant" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="AudioEnhanceVariantCombo" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Height="34">
+                                <ComboBoxItem Tag="audiox_base">AudioX Base (SFX + ambience)</ComboBoxItem>
+                                <ComboBoxItem Tag="audiox_maf">AudioX-MAF</ComboBoxItem>
+                                <ComboBoxItem Tag="audiox_maf_mmdit">AudioX-MAF-MMDiT</ComboBoxItem>
+                            </ComboBox>
+
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
+                                <CheckBox x:Name="AudioEnhanceAutoRunCheckBox" Content="Auto-run after narration generation" />
+                                <CheckBox x:Name="AudioEnhanceLlmDetectCheckBox" Margin="0,4,0,0" Content="Use LLM for cue detection" />
+                                <CheckBox x:Name="AudioEnhanceLlmRefineCheckBox" Margin="0,4,0,0" Content="Use optional LLM cue refinement" />
+                                <CheckBox x:Name="AudioEnhanceExportNarrationOnlyCheckBox" Margin="0,4,0,0" Content="Export narration_only.wav" />
+                                <CheckBox x:Name="AudioEnhanceExportStemsCheckBox" Margin="0,4,0,0" Content="Export stems (voice/ambience/sfx)" />
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="3" Text="Ambience / OneShot dB" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid Grid.Row="3" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="AudioEnhanceAmbienceDbTextBox" Height="34" />
+                                <TextBox x:Name="AudioEnhanceOneShotDbTextBox" Grid.Column="2" Height="34" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="4" Text="Ducking dB / Max cues/min" Margin="0,10,0,0" VerticalAlignment="Center" />
+                            <Grid Grid.Row="4" Grid.Column="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="AudioEnhanceDuckingDbTextBox" Height="34" />
+                                <TextBox x:Name="AudioEnhanceCueMaxPerMinuteTextBox" Grid.Column="2" Height="34" />
+                            </Grid>
+
+                            <CheckBox x:Name="AudioEnhanceAdvancedToggleCheckBox"
+                                      Grid.Row="5"
+                                      Grid.Column="1"
+                                      Margin="0,10,0,0"
+                                      Content="Advanced"
+                                      Visibility="Collapsed"
+                                      IsChecked="True"
+                                      Checked="AudioEnhanceAdvancedToggleCheckBox_OnChanged"
+                                      Unchecked="AudioEnhanceAdvancedToggleCheckBox_OnChanged" />
+
+                            <TextBlock x:Name="AudioEnhanceRuntimePathLabel" Grid.Row="6" Text="Runtime Path" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <Grid x:Name="AudioEnhanceRuntimePathGrid" Grid.Row="6" Grid.Column="1" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="AudioEnhanceRuntimePathTextBox" Height="34" />
+                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="90" Padding="16,0" Content="Browse" Click="BrowseAudioEnhanceRuntimePath_OnClick" />
+                            </Grid>
+
+                            <TextBlock x:Name="AudioEnhanceModelDirLabel" Grid.Row="7" Text="Model Folder" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                            <Grid x:Name="AudioEnhanceModelDirGrid" Grid.Row="7" Grid.Column="1" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="AudioEnhanceModelDirTextBox" Height="34" />
+                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="90" Padding="16,0" Content="Browse" Click="BrowseAudioEnhanceModelDir_OnClick" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="8" Text="Checklist" Margin="0,10,0,0" VerticalAlignment="Top" />
+                            <StackPanel Grid.Row="8" Grid.Column="1" Margin="0,10,0,0">
+                                <CheckBox x:Name="AudioEnhanceRuntimeReadyCheckBox" IsEnabled="False" Content="Runtime ready" />
+                                <CheckBox x:Name="AudioEnhanceModelReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="Model assets ready" />
+                                <CheckBox x:Name="AudioEnhanceDiskReadyCheckBox" IsEnabled="False" Margin="0,4,0,0" Content="Disk requirement" />
+                            </StackPanel>
+
+                            <Button x:Name="InstallAudioEnhanceButton"
+                                    Grid.Row="9"
+                                    Grid.Column="1"
+                                    Margin="0,10,0,0"
+                                    MinWidth="180"
+                                    Padding="18,0"
+                                    Height="34"
+                                    HorizontalAlignment="Left"
+                                    Content="Install Enhance Model"
+                                    Click="InstallAudioEnhanceButton_OnClick" />
+                        </Grid>
+                        <StackPanel Margin="0,8,0,0">
+                            <ProgressBar x:Name="AudioEnhanceInstallProgressBar" Height="6" IsIndeterminate="False" Value="0" />
+                            <TextBlock x:Name="AudioEnhanceInstallMetricsTextBlock" Margin="0,6,0,0" Foreground="#2F3A34" Text="Idle" />
+                            <TextBlock x:Name="AudioEnhanceInstallCurrentFileTextBlock" Margin="0,4,0,0" Foreground="#5B6661" Text="No active install" TextWrapping="Wrap" />
+                            <TextBlock x:Name="AudioEnhanceStatusTextBlock" Margin="0,6,0,0" Foreground="#5B6661" Text="Audio enhancement status: not checked." TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <TextBlock x:Name="StatusTextBlock"
+                   Grid.Row="1"
+                   Margin="4,12,4,0"
+                   Foreground="#4F7D63"
+                   TextWrapping="Wrap" />
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button MinWidth="96" Padding="18,0" Height="34" Content="Cancel" Margin="0,0,8,0" Click="CancelButton_OnClick" />
+            <Button MinWidth="120" Padding="18,0" Height="36" Content="Save Settings" Click="SaveButton_OnClick" />
+        </StackPanel>
+    </Grid>
+</Window>

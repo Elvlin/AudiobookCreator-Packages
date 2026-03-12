@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/AI/AppProject/AudiobookCreator/native/native_tts_engine/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

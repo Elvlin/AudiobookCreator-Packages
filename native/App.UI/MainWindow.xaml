@@ -1,0 +1,1617 @@
+<Window x:Class="AudiobookCreator.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AudiobookCreator.UI"
+        mc:Ignorable="d"
+        Title="Audiobook Creator"
+        Height="820"
+        Width="1280"
+        MinHeight="760"
+        MinWidth="1160"
+        Background="#F4F6F5"
+        FontFamily="Segoe UI"
+        FontSize="13"
+        TextOptions.TextFormattingMode="Display"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+    <Window.Resources>
+        <local:FileNameOnlyConverter x:Key="FileNameOnlyConverter" />
+        <SolidColorBrush x:Key="PrimaryGreen" Color="#4F7D63" />
+        <SolidColorBrush x:Key="SecondaryBg" Color="#E6ECE9" />
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#E1E6E3" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.04" Color="#000000" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="42" />
+            <Setter Property="Background" Value="{StaticResource PrimaryGreen}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryGreen}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#436C55" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#436C55" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.62" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Background" Value="{StaticResource SecondaryBg}" />
+            <Setter Property="BorderBrush" Value="#D5DDD8" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#2F3A34" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#D8E2DD" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.62" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TopBarButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
+            <Setter Property="Height" Value="38" />
+            <Setter Property="Padding" Value="8,0" />
+            <Setter Property="Background" Value="#F3F7F5" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#E3EBE7" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.62" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TopBarButtonLeftStyle" TargetType="Button" BasedOn="{StaticResource TopBarButtonStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8,0,0,8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#E3EBE7" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.62" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TopBarButtonRightStyle" TargetType="Button" BasedOn="{StaticResource TopBarButtonStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0,8,8,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#E3EBE7" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.62" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
+            <Setter Property="Background" Value="#C95C5C" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="#C95C5C" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#B44F4F" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#B44F4F" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.62" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="FlatIconButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="QueueActionIconButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
+            <Setter Property="Width" Value="36" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Style.Triggers>
+                <Trigger Property="Content" Value="">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Setter Property="IsHitTestVisible" Value="False" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="QueueProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Height" Value="6" />
+            <Setter Property="Foreground" Value="#4F7D63" />
+            <Setter Property="Background" Value="#E3E8E5" />
+        </Style>
+
+        <Style x:Key="GreenCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#2F3A34" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Grid Width="14" Height="14" VerticalAlignment="Center">
+                                <Border x:Name="CheckBorder"
+                                        Width="14"
+                                        Height="14"
+                                        CornerRadius="2"
+                                        BorderBrush="#BECAC3"
+                                        BorderThickness="1"
+                                        Background="White" />
+                                <Path x:Name="CheckGlyph"
+                                      Data="M 2 7 L 5.2 10.2 L 12 3.2"
+                                      Stroke="White"
+                                      StrokeThickness="1.8"
+                                      StrokeStartLineCap="Round"
+                                      StrokeEndLineCap="Round"
+                                      StrokeLineJoin="Round"
+                                      Visibility="Collapsed" />
+                            </Grid>
+                            <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#4F7D63" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#4F7D63" />
+                                <Setter TargetName="CheckGlyph" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.65" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="#E1E6E3" BorderThickness="0,0,0,1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#5F8F76" Offset="0" />
+                    <GradientStop Color="#4F7D63" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Margin="24,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image x:Name="HeaderIcon" Width="34" Height="34" Margin="0,0,10,0" />
+                    <TextBlock Text="Audiobook Creator" Foreground="White" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Height="38"
+                        MinWidth="560"
+                        VerticalAlignment="Center"
+                        Margin="0"
+                        CornerRadius="8"
+                        Background="#F3F7F5"
+                        BorderBrush="#D3DBD7"
+                        BorderThickness="1"
+                        Padding="0">
+                    <Grid VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="NewProjectButton" Grid.Column="0" Content="New Project" Style="{StaticResource TopBarButtonLeftStyle}" Click="NewProjectButton_OnClick" />
+                        <Border Grid.Column="1" Width="1" Margin="0" Background="#DDE4E0" HorizontalAlignment="Center" />
+                        <Button x:Name="OpenProjectButton" Grid.Column="2" Content="Open Project" Style="{StaticResource TopBarButtonStyle}" Click="OpenProjectButton_OnClick" />
+                        <Border Grid.Column="3" Width="1" Margin="0" Background="#DDE4E0" HorizontalAlignment="Center" />
+                        <Button x:Name="SaveProjectButton" Grid.Column="4" Content="Save" Style="{StaticResource TopBarButtonStyle}" Click="SaveProjectButton_OnClick" />
+                        <Border Grid.Column="5" Width="1" Margin="0" Background="#DDE4E0" HorizontalAlignment="Center" />
+                        <Button x:Name="SettingsButton" Grid.Column="6" Content="Settings" Style="{StaticResource TopBarButtonRightStyle}" Click="SettingsButton_OnClick" />
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="2"
+                        Margin="12,0,0,0"
+                        Width="34"
+                        Height="34"
+                        VerticalAlignment="Center"
+                        Content="X"
+                        FontSize="18"
+                        Foreground="White"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="CloseButton_OnClick" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="24,24,24,12">
+            <TabControl x:Name="MainTabControl" BorderThickness="0" Background="Transparent">
+                <TabItem Header="Create Audiobook">
+                    <Grid Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.08*" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="0.92*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="0.9*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="0" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Project Details" FontSize="16" FontWeight="SemiBold" Foreground="#1F2723" />
+
+                    <Grid Grid.Row="1" Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="ProjectSelectorCombo" Height="32" VerticalContentAlignment="Center" SelectionChanged="ProjectSelectorCombo_OnSelectionChanged" />
+                        <Button x:Name="InlineNewProjectButton" Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Padding="14,0" Content="New" Style="{StaticResource SecondaryButtonStyle}" Click="NewProjectButton_OnClick" />
+                    </Grid>
+
+                    <Separator Grid.Row="2" Margin="0,8,0,8" Background="#E1E6E3" />
+
+                    <TextBlock Grid.Row="3" Text="Input Files" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <Grid Grid.Row="4" Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="AddFilesButton"
+                                Grid.Column="0"
+                                MinWidth="92"
+                                Height="30"
+                                FontSize="12"
+                                Padding="10,0"
+                                Content="Add Files"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Click="AddFilesButton_OnClick"
+                                HorizontalAlignment="Left" />
+
+                        <Button x:Name="ClearInputFilesButton"
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                MinWidth="80"
+                                Height="30"
+                                FontSize="12"
+                                Padding="10,0"
+                                Content="Clear All"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Click="ClearAllInputFilesButton_OnClick"
+                                HorizontalAlignment="Left" />
+
+                        <CheckBox x:Name="UseAllInputFilesCheckBox"
+                                  Grid.Column="4"
+                                  Content="Use all imported files"
+                                  VerticalAlignment="Center"
+                                  Style="{StaticResource GreenCheckBoxStyle}"
+                                  Checked="UseAllInputFilesCheckBox_OnChanged"
+                                  Unchecked="UseAllInputFilesCheckBox_OnChanged" />
+                    </Grid>
+
+                    <ListBox x:Name="InputFilesList"
+                             Grid.Row="5"
+                             Margin="0,6,0,0"
+                             MinHeight="120"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="True"
+                             BorderBrush="#E1E6E3"
+                             BorderThickness="1">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Background" Value="White" />
+                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                <Setter Property="BorderBrush" Value="#E9EEEB" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F0F3F1" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#F0F3F1" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="42" Margin="8,0,6,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="24" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="24" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                              Checked="InputFileSelectionCheckBox_OnChanged"
+                                              Unchecked="InputFileSelectionCheckBox_OnChanged">
+                                        <CheckBox.Style>
+                                            <Style TargetType="CheckBox" BasedOn="{StaticResource GreenCheckBoxStyle}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsChecked, ElementName=UseAllInputFilesCheckBox}" Value="True">
+                                                        <Setter Property="IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </CheckBox.Style>
+                                    </CheckBox>
+                                    <TextBlock Grid.Column="1"
+                                               Text="&#xE160;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               Foreground="#82908A"
+                                               FontSize="14"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding DisplayName}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <Button Grid.Column="4"
+                                            Content="Prepare"
+                                            Height="24"
+                                            Width="74"
+                                            FontSize="11"
+                                            Padding="8,0"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Tag="{Binding FullPath}"
+                                            Click="PrepareInputFileButton_OnClick"
+                                            Visibility="{Binding PrepareButtonVisibility}" />
+                                    <Button
+                                            Width="22"
+                                            Height="22"
+                                            Margin="0,0,0,0"
+                                            Content="&#xE74D;"
+                                            FontFamily="Segoe MDL2 Assets"
+                                            Foreground="#7C8782"
+                                            Padding="0"
+                                            Grid.Column="6"
+                                            Tag="{Binding FullPath}"
+                                            Click="RemoveInputFileButton_OnClick"
+                                            Style="{StaticResource FlatIconButtonStyle}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <TextBlock Grid.Row="7" Margin="0,12,0,0" Text="Output Folder" FontSize="13" Visibility="Collapsed" />
+                    <Grid Grid.Row="8" Margin="0,6,0,0" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="OutputFolderTextBox" Height="36" VerticalContentAlignment="Center" LostFocus="OutputFolderTextBox_OnLostFocus" />
+                        <Button x:Name="BrowseOutputButton" Grid.Column="1" Content="Browse" Style="{StaticResource SecondaryButtonStyle}" Click="BrowseOutputButton_OnClick" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Voice Settings" FontSize="16" FontWeight="SemiBold" Foreground="#1F2723" />
+                    <TextBlock Grid.Row="1" Margin="0,10,0,0" Text="Narrator Voice" />
+                    <Grid Grid.Row="2" Margin="0,6,0,0">
+                        <ComboBox x:Name="VoiceCombo" Height="36" VerticalContentAlignment="Center" SelectionChanged="VoiceCombo_OnSelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" />
+                                        <TextBlock Text=" ✓" VerticalAlignment="Center" Foreground="#4F7D63" Margin="6,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ShowRefCheckmark}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <StackPanel Grid.Row="3" Margin="0,10,0,0">
+                                <Button x:Name="PlaySampleButton" MinWidth="136" Padding="18,0" HorizontalAlignment="Left" Content="Play Sample" Style="{StaticResource SecondaryButtonStyle}" Click="PlaySampleButton_OnClick" />
+                        <TextBlock x:Name="VoiceModelNoteText"
+                                   Margin="0,8,0,0"
+                                   Foreground="#5B6661"
+                                   FontSize="12"
+                                   TextWrapping="Wrap"
+                                   Visibility="Collapsed"
+                                   Text="" />
+                    </StackPanel>
+                    <Separator Grid.Row="4" Margin="0,12,0,12" Background="#E1E6E3" />
+                    <TextBlock x:Name="StylePresetLabel" Grid.Row="5" Text="Speaking Style" />
+                    <ComboBox x:Name="StylePresetCombo" Grid.Row="5" Margin="0,24,0,0" Height="36" VerticalContentAlignment="Center" SelectionChanged="StylePresetCombo_OnSelectionChanged">
+                        <ComboBoxItem IsSelected="True">Standard</ComboBoxItem>
+                        <ComboBoxItem>Expressive</ComboBoxItem>
+                        <ComboBoxItem>Calm</ComboBoxItem>
+                    </ComboBox>
+                    <Grid Grid.Row="6" Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Speech Speed" VerticalAlignment="Center" />
+                        <Slider x:Name="SpeedSlider" Grid.Column="1" Margin="12,0,12,0" Minimum="0.5" Maximum="1.5" TickFrequency="0.1" Value="1.0" ValueChanged="SpeedSlider_OnValueChanged" />
+                        <TextBlock x:Name="SpeedLabel" Grid.Column="2" Text="1.0x" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Grid.Row="7" Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="ModelSummaryText" Text="AI Model: chatterbox-ONNX" />
+                        <TextBlock x:Name="ModelControlsSummaryText" Grid.Row="1" Margin="0,6,0,0" Foreground="#5B6661" FontSize="12" Text="Chunk: auto" />
+                        <Grid Grid.Row="2" Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Device" VerticalAlignment="Center" Foreground="#2F3A34" />
+                            <ComboBox x:Name="MainDeviceCombo"
+                                      Grid.Column="2"
+                                      Height="32"
+                                      VerticalContentAlignment="Center"
+                                      SelectionChanged="MainDeviceCombo_OnSelectionChanged">
+                                <ComboBoxItem>auto</ComboBoxItem>
+                                <ComboBoxItem>cpu</ComboBoxItem>
+                                <ComboBoxItem>gpu</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                        <Grid Grid.Row="3" Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                                                <Button Grid.Column="1" MinWidth="140" Padding="18,0" HorizontalAlignment="Right" Content="Model Controls" Style="{StaticResource SecondaryButtonStyle}" Click="ModelControlsButton_OnClick" />
+                                                <Button Grid.Column="3" MinWidth="160" Padding="18,0" HorizontalAlignment="Right" Content="Advanced Settings" Style="{StaticResource SecondaryButtonStyle}" Click="SettingsButton_OnClick" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Grid.ColumnSpan="3" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Job Queue" FontSize="16" FontWeight="SemiBold" Foreground="#1F2723" />
+                        <TextBlock x:Name="JobQueueSummaryText"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="#5B6661"
+                                   FontSize="13"
+                                   Text="(0/0 done, 0 left)" />
+                    </StackPanel>
+                    <TabControl Grid.Row="1"
+                                Margin="0,12,0,0"
+                                Background="Transparent"
+                                BorderThickness="0">
+                        <TabItem Header="Queue">
+                            <DataGrid x:Name="QueueGrid"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="Column"
+                                      ColumnHeaderHeight="40"
+                                      RowHeight="44"
+                                      CanUserAddRows="False"
+                                      CanUserResizeColumns="True"
+                                      GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#E9EEEB"
+                                      VerticalGridLinesBrush="#E9EEEB"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      ScrollViewer.CanContentScroll="True"
+                                      IsReadOnly="True"
+                                      MouseDoubleClick="QueueGrid_OnMouseDoubleClick">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#F7F9F8" />
+                                        <Setter Property="BorderBrush" Value="#E1E6E3" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                        <Setter Property="Foreground" Value="#5B6661" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="FontSize" Value="13" />
+                                        <Setter Property="Padding" Value="10,0,10,0" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.RowHeaderStyle>
+                                    <Style TargetType="DataGridRowHeader">
+                                        <Setter Property="Width" Value="0" />
+                                    </Style>
+                                </DataGrid.RowHeaderStyle>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="Foreground" Value="#1F2723" />
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="File / Chapter" Binding="{Binding FileName}" Width="3.2*" MinWidth="220" />
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1.15*" MinWidth="100" />
+                                    <DataGridTemplateColumn Header="Progress" Width="1.85*" MinWidth="185">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,10,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <ProgressBar Grid.Column="0"
+                                                                 Maximum="100"
+                                                                 Value="{Binding ProgressValue}"
+                                                                 Style="{StaticResource QueueProgressBarStyle}"
+                                                                 VerticalAlignment="Center" />
+                                                    <TextBlock Grid.Column="1"
+                                                               Margin="8,0,0,0"
+                                                               Text="{Binding ProgressLabel}"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="#2F3A34" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Chunk" Binding="{Binding ChunkInfo}" Width="1.95*" MinWidth="180" />
+                                    <DataGridTextColumn Header="ETA" Binding="{Binding Eta}" Width="1.0*" MinWidth="100" />
+                                    <DataGridTemplateColumn Header="Actions" Width="130" MinWidth="130">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <Button Content="{Binding PrimaryActionGlyph}"
+                                                            ToolTip="{Binding PrimaryActionToolTip}"
+                                                            Margin="0,0,6,0"
+                                                            Tag="{Binding}"
+                                                            Style="{StaticResource QueueActionIconButtonStyle}"
+                                                            Click="RetryQueueRowButton_OnClick" />
+                                                    <Button Content="{Binding SecondaryActionGlyph}"
+                                                            ToolTip="{Binding SecondaryActionToolTip}"
+                                                            Tag="{Binding}"
+                                                            Style="{StaticResource QueueActionIconButtonStyle}"
+                                                            Click="PlayQueueRowButton_OnClick" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Header="History">
+                            <DataGrid x:Name="HistoryGrid"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="Column"
+                                      ColumnHeaderHeight="40"
+                                      RowHeight="40"
+                                      CanUserAddRows="False"
+                                      CanUserResizeColumns="True"
+                                      GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#E9EEEB"
+                                      VerticalGridLinesBrush="#E9EEEB"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      ScrollViewer.CanContentScroll="True"
+                                      IsReadOnly="True">
+                                <DataGrid.Resources>
+                                    <Style x:Key="HistoryCellLeftStyle" TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Left" />
+                                        <Setter Property="TextAlignment" Value="Left" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                    <Style x:Key="HistoryCellCenterStyle" TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                    <Style x:Key="HistoryCellRightStyle" TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                        <Setter Property="TextAlignment" Value="Right" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                    <Style x:Key="HistoryHeaderLeftStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                    </Style>
+                                    <Style x:Key="HistoryHeaderCenterStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                    <Style x:Key="HistoryHeaderRightStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#F7F9F8" />
+                                        <Setter Property="BorderBrush" Value="#E1E6E3" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                        <Setter Property="Foreground" Value="#5B6661" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="FontSize" Value="13" />
+                                        <Setter Property="Padding" Value="10,0,10,0" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.RowHeaderStyle>
+                                    <Style TargetType="DataGridRowHeader">
+                                        <Setter Property="Width" Value="0" />
+                                    </Style>
+                                </DataGrid.RowHeaderStyle>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="Foreground" Value="#1F2723" />
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="File / Chapter" Binding="{Binding FileName}" Width="2.7*" MinWidth="220"
+                                                        ElementStyle="{StaticResource HistoryCellLeftStyle}"
+                                                        HeaderStyle="{StaticResource HistoryHeaderLeftStyle}" />
+                                    <DataGridTextColumn Header="Model" Binding="{Binding ModelLabel}" Width="2.0*" MinWidth="170"
+                                                        ElementStyle="{StaticResource HistoryCellLeftStyle}"
+                                                        HeaderStyle="{StaticResource HistoryHeaderLeftStyle}" />
+                                    <DataGridTextColumn Header="Device" Binding="{Binding DeviceLabel}" Width="1.0*" MinWidth="90"
+                                                        ElementStyle="{StaticResource HistoryCellCenterStyle}"
+                                                        HeaderStyle="{StaticResource HistoryHeaderCenterStyle}" />
+                                    <DataGridTextColumn Header="Voice" Binding="{Binding VoiceLabel}" Width="1.6*" MinWidth="130"
+                                                        ElementStyle="{StaticResource HistoryCellLeftStyle}"
+                                                        HeaderStyle="{StaticResource HistoryHeaderLeftStyle}" />
+                                    <DataGridTextColumn Header="Duration" Binding="{Binding DurationLabel}" Width="1.0*" MinWidth="90"
+                                                        ElementStyle="{StaticResource HistoryCellCenterStyle}"
+                                                        HeaderStyle="{StaticResource HistoryHeaderCenterStyle}" />
+                                    <DataGridTextColumn Header="Completed" Binding="{Binding CompletedAt}" Width="1.6*" MinWidth="150"
+                                                        ElementStyle="{StaticResource HistoryCellCenterStyle}"
+                                                        HeaderStyle="{StaticResource HistoryHeaderCenterStyle}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+                    </TabControl>
+                    <Grid Grid.Row="2" Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox x:Name="AutoClearCheckBox" Content="Auto clear completed jobs" VerticalAlignment="Center" Style="{StaticResource GreenCheckBoxStyle}" />
+                        <CheckBox x:Name="EnhanceAudioCheckBox"
+                                  Grid.Column="1"
+                                  Margin="14,0,0,0"
+                                  Content="Enhance with Sound Effects (AudioX)"
+                                  VerticalAlignment="Center"
+                                  Style="{StaticResource GreenCheckBoxStyle}"
+                                  Checked="EnhanceAudioCheckBox_OnChanged"
+                                  Unchecked="EnhanceAudioCheckBox_OnChanged" />
+                                    <Button x:Name="ClearFinishedButton" Grid.Column="3" MinWidth="140" Padding="18,0" Content="Clear Finished" Style="{StaticResource SecondaryButtonStyle}" Click="ClearFinishedButton_OnClick" />
+                                    <Button x:Name="ClearQueueButton" Grid.Column="5" MinWidth="120" Padding="18,0" Content="Clear Queue" Style="{StaticResource SecondaryButtonStyle}" Click="ClearQueueButton_OnClick" />
+                                    <Button x:Name="GenerateButton" Grid.Column="7" MinWidth="160" Padding="22,0" Content="Generate" Style="{StaticResource PrimaryButtonStyle}" Click="GenerateButton_OnClick" />
+                    </Grid>
+                </Grid>
+            </Border>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Voice Cloning">
+                    <Grid Margin="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Voice Clone Tools" FontSize="16" FontWeight="SemiBold" />
+                                <TabControl Grid.Row="1" Margin="0,12,0,0">
+                                    <TabItem Header="Voice Recording">
+                                        <Grid Margin="8">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Foreground="#4A5550" Text="Record source audio and create a direct clone voice file." />
+                                            <Grid Grid.Row="1" Margin="0,12,0,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="1.35*" MinWidth="240" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Prepared Script" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                                <ComboBox x:Name="PreparedScriptCombo" Grid.Column="1" Height="36" VerticalContentAlignment="Center" SelectionChanged="PreparedScriptCombo_OnSelectionChanged" />
+                                                <Button Grid.Column="2" Margin="10,0,0,0" Content="Start Recording" Style="{StaticResource SecondaryButtonStyle}" Click="StartRecording_OnClick" />
+                                                <Button Grid.Column="3" Margin="8,0,0,0" MinWidth="96" Padding="16,0" Content="Stop" Style="{StaticResource SecondaryButtonStyle}" Click="StopRecording_OnClick" />
+                                                <TextBlock x:Name="RecordingTimerText" Grid.Column="4" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#2F3A34" Text="00:00" />
+                                            </Grid>
+                                            <TextBox x:Name="PreparedScriptTextBox" Grid.Row="2" Margin="0,10,0,0" Height="86" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderBrush="#E1E6E3" Background="#F9FBFA" />
+                                            <Grid Grid.Row="3" Margin="0,10,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="1.1*" MinWidth="180" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Mic Level" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                                <ProgressBar x:Name="RecordingLevelBar" Grid.Column="1" Height="12" Maximum="100" />
+                                                <StackPanel Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center">
+                                                    <TextBlock x:Name="RecordingStatusText" Foreground="#4F7D63" Text="Recorder idle." />
+                                                    <TextBlock x:Name="MicrophoneDetectionText" Margin="0,2,0,0" Foreground="#4A5550" Text="Microphone: checking..." />
+                                                </StackPanel>
+                                                <Button Grid.Column="3" Margin="10,0,0,0" MinWidth="84" Padding="14,0" Content="Test Mic" Style="{StaticResource SecondaryButtonStyle}" Click="StartMicTest_OnClick" />
+                                                <Button Grid.Column="4" Margin="8,0,0,0" MinWidth="84" Padding="14,0" Content="Stop Test" Style="{StaticResource SecondaryButtonStyle}" Click="StopMicTest_OnClick" />
+                                                <Grid Grid.Row="1" Grid.ColumnSpan="5" Margin="0,10,0,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="1.2*" MinWidth="220" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="Clone Name" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                                    <TextBox x:Name="CloneNameTextBox" Grid.Column="1" Height="36" VerticalContentAlignment="Center" />
+                                                    <Button Grid.Column="2" Margin="12,0,0,0" MinWidth="150" Padding="18,0" Content="Create Clone Voice" Style="{StaticResource PrimaryButtonStyle}" Click="CreateVoiceClone_OnClick" />
+                                                    <Button Grid.Column="3" Margin="8,0,0,0" MinWidth="120" Padding="16,0" Content="Refresh List" Style="{StaticResource SecondaryButtonStyle}" Click="RefreshCloneList_OnClick" />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="Voice Generation">
+                                        <Grid Margin="8">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" MinWidth="220" />
+                                                    <ColumnDefinition Width="Auto" MinWidth="130" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Foreground="#4A5550" VerticalAlignment="Center" Text="Generate a new voice from text + style prompt (Qwen VoiceDesign, no source audio)." />
+                                                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="210" Padding="18,0" Content="Generate Voice Design" Style="{StaticResource SecondaryButtonStyle}" Click="GenerateQwenPromptClone_OnClick" />
+                                                <Button x:Name="CancelVoiceDesignButton" Grid.Column="2" Margin="8,0,0,0" MinWidth="120" Padding="18,0" Content="Cancel" Style="{StaticResource SecondaryButtonStyle}" Click="CancelVoiceDesign_OnClick" Visibility="Collapsed" />
+                                            </Grid>
+                                            <TextBlock x:Name="VoiceDesignReadinessTextBlock" Grid.Row="1" Margin="0,6,0,0" Foreground="#8A4B1F" Text="VoiceDesign model: checking..." TextWrapping="Wrap" />
+                                            <Grid Grid.Row="2" Margin="0,8,0,0" Visibility="Collapsed" x:Name="VoiceDesignProgressPanel">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock x:Name="VoiceDesignProgressText" Foreground="#4F7D63" Text="Preparing..." />
+                                                    <ProgressBar x:Name="VoiceDesignProgressBar"
+                                                                 Margin="0,4,0,0"
+                                                                 Height="8"
+                                                                 Maximum="100"
+                                                                 IsIndeterminate="True" />
+                                                </StackPanel>
+                                                <TextBlock x:Name="VoiceDesignElapsedText"
+                                                           Grid.Column="1"
+                                                           Margin="10,0,0,0"
+                                                           VerticalAlignment="Bottom"
+                                                           Foreground="#4A5550"
+                                                           FontWeight="SemiBold"
+                                                           Text="00:00" />
+                                            </Grid>
+                                            <Grid Grid.Row="3" Margin="0,10,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Voice Name" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                                <TextBox x:Name="QwenVoiceDesignNameTextBox"
+                                                         Grid.Column="1"
+                                                         Height="36"
+                                                         VerticalContentAlignment="Center"
+                                                         TextChanged="VoiceDesignDraftField_OnChanged"
+                                                         ToolTip="Name for the generated voice file." />
+                                                <TextBlock Grid.Row="1" Text="Voice Text" VerticalAlignment="Center" Margin="0,8,12,0" />
+                                                <Grid Grid.Row="1" Grid.Column="1" Margin="0,8,0,0">
+                                                    <TextBox x:Name="QwenVoiceDesignTextBox" Height="36" VerticalContentAlignment="Center" TextChanged="VoiceDesignDraftField_OnChanged" ToolTip="Text to speak with the designed voice." />
+                                                    <TextBlock Margin="8,0,8,0"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="#87938E"
+                                                               IsHitTestVisible="False"
+                                                               Text="Example: In the quiet observatory, the night sky shimmered with distant stars.">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Text, ElementName=QwenVoiceDesignTextBox}" Value="">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Grid>
+                                                <TextBlock Grid.Row="2" Text="Style Prompt" VerticalAlignment="Center" Margin="0,8,12,0" />
+                                                <Grid Grid.Row="2" Grid.Column="1" Margin="0,8,0,0">
+                                                    <TextBox x:Name="QwenVoicePromptTextBox" Height="36" VerticalContentAlignment="Center" TextChanged="VoiceDesignDraftField_OnChanged" ToolTip="Example: calm mature narrator, warm tone, steady pacing, clear dialogue contrast" />
+                                                    <TextBlock Margin="8,0,8,0"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="#87938E"
+                                                               IsHitTestVisible="False"
+                                                               Text="Example: adult male narrator, calm deep tone, neutral US accent, steady pacing, clear diction">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Text, ElementName=QwenVoicePromptTextBox}" Value="">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Grid>
+                                                <TextBlock Grid.Row="3" Text="Language" VerticalAlignment="Center" Margin="0,8,12,0" />
+                                                <ComboBox x:Name="QwenVoiceDesignLanguageCombo" Grid.Row="3" Grid.Column="1" Margin="0,8,0,0" Height="34" SelectionChanged="VoiceDesignDraftLanguage_OnSelectionChanged" ToolTip="Supported by Qwen VoiceDesign: 10 languages + Auto detect.">
+                                                    <ComboBoxItem Tag="auto" IsSelected="True">Auto Detect</ComboBoxItem>
+                                                    <ComboBoxItem Tag="english">English</ComboBoxItem>
+                                                    <ComboBoxItem Tag="chinese">Chinese (Mandarin)</ComboBoxItem>
+                                                    <ComboBoxItem Tag="japanese">Japanese</ComboBoxItem>
+                                                    <ComboBoxItem Tag="korean">Korean</ComboBoxItem>
+                                                    <ComboBoxItem Tag="german">German</ComboBoxItem>
+                                                    <ComboBoxItem Tag="french">French</ComboBoxItem>
+                                                    <ComboBoxItem Tag="russian">Russian</ComboBoxItem>
+                                                    <ComboBoxItem Tag="portuguese">Portuguese</ComboBoxItem>
+                                                    <ComboBoxItem Tag="spanish">Spanish</ComboBoxItem>
+                                                    <ComboBoxItem Tag="italian">Italian</ComboBoxItem>
+                                                </ComboBox>
+                                            </Grid>
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Available Clone Voices" FontSize="16" FontWeight="SemiBold" />
+                                <ListBox x:Name="CloneVoicesList"
+                                         Grid.Row="1"
+                                         Margin="0,12,0,0"
+                                         BorderBrush="#E1E6E3"
+                                         BorderThickness="1" />
+                                <Grid Grid.Row="2" Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="CloneStatusTextBlock" VerticalAlignment="Center" Foreground="#4F7D63" Text="Ready." />
+                                    <Button Grid.Column="1"
+                                            Width="170"
+                                            Content="Import Voice"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Click="ImportCloneVoice_OnClick" />
+                                    <Button Grid.Column="3"
+                                            Width="170"
+                                            Content="Delete Selected Clone"
+                                            Style="{StaticResource DangerButtonStyle}"
+                                            Click="DeleteSelectedClone_OnClick" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="AudioEnhancementTabItem" Header="Audio Enhancement">
+                    <Grid Margin="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.9*" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="0.95*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.15*" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="0.95*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Input Audio Files" FontSize="16" FontWeight="SemiBold" Foreground="#1F2723" />
+
+                                <Grid Grid.Row="1" Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="EnhanceAddFilesButton"
+                                            Grid.Column="0"
+                                            MinWidth="112"
+                                            Height="30"
+                                            FontSize="12"
+                                            Padding="10,0"
+                                            Content="Add Audio"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Click="EnhanceAddFilesButton_OnClick" />
+                                    <Button x:Name="EnhanceClearInputFilesButton"
+                                            Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            MinWidth="80"
+                                            Height="30"
+                                            FontSize="12"
+                                            Padding="10,0"
+                                            Content="Clear All"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Click="EnhanceClearInputFilesButton_OnClick" />
+                                    <CheckBox x:Name="EnhanceUseAllInputFilesCheckBox"
+                                              Grid.Column="3"
+                                              Content="Use all imported files"
+                                              VerticalAlignment="Center"
+                                              Style="{StaticResource GreenCheckBoxStyle}"
+                                              Checked="EnhanceUseAllInputFilesCheckBox_OnChanged"
+                                              Unchecked="EnhanceUseAllInputFilesCheckBox_OnChanged" />
+                                </Grid>
+
+                                <ListBox x:Name="EnhanceInputFilesList"
+                                         Grid.Row="2"
+                                         Margin="0,8,0,0"
+                                         MinHeight="120"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.CanContentScroll="True"
+                                         BorderBrush="#E1E6E3"
+                                         BorderThickness="1">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Padding" Value="0" />
+                                            <Setter Property="Margin" Value="0" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Setter Property="Background" Value="White" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                            <Setter Property="BorderBrush" Value="#E9EEEB" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#F0F3F1" />
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="#F0F3F1" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="40" Margin="8,0,6,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="24" />
+                                                    <ColumnDefinition Width="20" />
+                                                    <ColumnDefinition Width="8" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="24" />
+                                                </Grid.ColumnDefinitions>
+                                                <CheckBox Grid.Column="0"
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center"
+                                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                          Checked="EnhanceInputFileSelectionCheckBox_OnChanged"
+                                                          Unchecked="EnhanceInputFileSelectionCheckBox_OnChanged">
+                                                    <CheckBox.Style>
+                                                        <Style TargetType="CheckBox" BasedOn="{StaticResource GreenCheckBoxStyle}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsChecked, ElementName=EnhanceUseAllInputFilesCheckBox}" Value="True">
+                                                                    <Setter Property="IsEnabled" Value="False" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </CheckBox.Style>
+                                                </CheckBox>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="&#xE189;"
+                                                           FontFamily="Segoe MDL2 Assets"
+                                                           Foreground="#82908A"
+                                                           FontSize="14"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="3"
+                                                           Text="{Binding FileName}"
+                                                           VerticalAlignment="Center"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <Button Grid.Column="4"
+                                                        Width="78"
+                                                        Height="24"
+                                                        Margin="0"
+                                                        VerticalAlignment="Center"
+                                                        Content="Prepare"
+                                                        FontSize="11"
+                                                        Padding="8,0"
+                                                        Tag="{Binding FullPath}"
+                                                        Click="EnhanceOpenPrepForFileButton_OnClick"
+                                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                                <Button Grid.Column="5"
+                                                        Width="22"
+                                                        Height="22"
+                                                        Margin="0,0,0,0"
+                                                        Content="&#xE74D;"
+                                                        FontFamily="Segoe MDL2 Assets"
+                                                        Foreground="#7C8782"
+                                                        Padding="0"
+                                                        Tag="{Binding FullPath}"
+                                                        Click="EnhanceRemoveInputFileButton_OnClick"
+                                                        Style="{StaticResource FlatIconButtonStyle}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Enhancement Settings" FontSize="16" FontWeight="SemiBold" Foreground="#1F2723" />
+                                <Grid Grid.Row="1" Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Output Folder" VerticalAlignment="Center" Margin="0,0,10,0" />
+                                    <TextBox x:Name="EnhanceOutputFolderTextBox" Grid.Column="1" Height="34" VerticalContentAlignment="Center" />
+                                    <Button x:Name="EnhanceBrowseOutputButton"
+                                            Grid.Column="2"
+                                            Margin="8,0,0,0"
+                                            Content="Browse"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Click="EnhanceBrowseOutputButton_OnClick" />
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </Style>
+                                    </Grid.Style>
+                                </Grid>
+                                <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                                    <CheckBox x:Name="EnhanceTabEnableCheckBox"
+                                              Content="Enhance with SFX/Ambience (AudioX)"
+                                              Style="{StaticResource GreenCheckBoxStyle}"
+                                              IsChecked="True" />
+                                    <TextBlock Margin="0,6,0,0"
+                                               Foreground="#5B6661"
+                                               TextWrapping="Wrap"
+                                               Text="Scene Notes (optional, improves automatic cue quality):" />
+                                    <Grid Margin="0,6,0,0">
+                                        <TextBox x:Name="EnhanceSceneNotesTextBox"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 MinHeight="96"
+                                                 MaxHeight="180" />
+                                        <TextBlock Margin="10,10,10,0"
+                                                   Foreground="#8A9690"
+                                                   TextWrapping="Wrap"
+                                                   IsHitTestVisible="False"
+                                                   VerticalAlignment="Top"
+                                                   Text="Example cue notes:&#x0a;Rainy night in city street, low tension ambience.&#x0a;Footsteps approach.&#x0a;Door slam near the end.&#x0a;&#x0a;Tip: write short cue lines, not the full chapter text.">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=EnhanceSceneNotesTextBox}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=EnhanceSceneNotesTextBox}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                    <TextBlock Margin="0,6,0,0"
+                                               Foreground="#6A7670"
+                                               TextWrapping="Wrap"
+                                               FontSize="11"
+                                               Text="Notes are used to extract SFX/ambience cues on this tab. The chapter-generation pipeline only auto-detects sound effects." />
+                                    <TextBlock Margin="0,6,0,0"
+                                               Foreground="#5B6661"
+                                               TextWrapping="Wrap"
+                                               FontSize="11"
+                                               Text="Manual timeline has priority. If timeline exists for a file, exact timestamps are used instead of automatic cue guessing." />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="4" Grid.ColumnSpan="3" Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Enhance Queue" FontSize="16" FontWeight="SemiBold" Foreground="#1F2723" />
+                                    <TextBlock x:Name="EnhanceQueueSummaryText"
+                                               Grid.Column="1"
+                                               Foreground="#5B6661"
+                                               VerticalAlignment="Center"
+                                               Text="(0/0 done, 0 left)" />
+                                </Grid>
+
+                                <DataGrid x:Name="EnhanceQueueGrid"
+                                          Grid.Row="1"
+                                          Margin="0,12,0,0"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="Horizontal"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#F7FAF8"
+                                          BorderBrush="#D7E0DB"
+                                          BorderThickness="1"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Audio File" Binding="{Binding FileName}" Width="2.2*" />
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1*" />
+                                        <DataGridTemplateColumn Header="Progress" Width="1.7*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,2,0,2">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <ProgressBar Grid.Column="0"
+                                                                     Height="6"
+                                                                     Maximum="100"
+                                                                     Value="{Binding ProgressValue}"
+                                                                     Style="{StaticResource QueueProgressBarStyle}" />
+                                                        <TextBlock Grid.Column="1"
+                                                                   Margin="8,0,0,0"
+                                                                   VerticalAlignment="Center"
+                                                                   Text="{Binding ProgressLabel}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="Stage" Binding="{Binding ChunkInfo}" Width="1.2*" />
+                                        <DataGridTextColumn Header="ETA" Binding="{Binding Eta}" Width="1*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Grid Grid.Row="2" Margin="0,14,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="EnhanceClearQueueButton"
+                                            Grid.Column="1"
+                                            Width="120"
+                                            Content="Clear Queue"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Click="EnhanceClearQueueButton_OnClick" />
+                                    <Button x:Name="EnhanceGenerateButton"
+                                            Grid.Column="3"
+                                            Width="170"
+                                            Content="Enhance Audio"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Click="EnhanceGenerateButton_OnClick" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Help">
+                    <Border Style="{StaticResource CardStyle}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="Documentation" FontSize="20" FontWeight="SemiBold" Foreground="#1F2723" />
+                                <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#4A5851" Text="Built-in guide for first launch, project workflow, model choice, settings, mixed voice prep, API usage, and support." />
+
+                                <GroupBox Header="First Launch" Margin="0,16,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="1. Open Settings before the first generation." />
+                                        <TextBlock TextWrapping="Wrap" Text="2. In Simple settings, choose a model preset." />
+                                        <TextBlock TextWrapping="Wrap" Text="3. If the selected local model is not ready, click Download Model Now and wait for the checklist to pass." />
+                                        <TextBlock TextWrapping="Wrap" Text="4. If you want cloud TTS, add the provider API key in Simple settings first." />
+                                        <TextBlock TextWrapping="Wrap" Text="5. Create a new project, add chapter .txt files, then generate." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Output is written to output/[ProjectName]. Projects, generated audio, model files, and voice files are real files on disk." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Quick Start" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="1. Create or open a project from the top bar." />
+                                        <TextBlock TextWrapping="Wrap" Text="2. Add one or more chapter text files in Create Audiobook." />
+                                        <TextBlock TextWrapping="Wrap" Text="3. Choose narrator voice, speaking style, and speed on the main screen." />
+                                        <TextBlock TextWrapping="Wrap" Text="4. Click Generate. Queue shows status, chunk stage, and ETA for each chapter." />
+                                        <TextBlock TextWrapping="Wrap" Text="5. Optional subtitle export writes .srt and/or .ass beside each output file." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Queue note: Done (no cues) means narration finished successfully, but automatic Sound Effects found nothing useful to add." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Choose Your Model" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- Chatterbox ONNX: stable local narration with simple setup." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Qwen3 TTS: strongest local Qwen workflow, plus CustomVoice / VoiceDesign variants." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Kitten TTS: lightweight local option, but needs eSpeak-NG." />
+                                        <TextBlock TextWrapping="Wrap" Text="- OpenAI API: cloud TTS using OpenAI voices and OpenAI model list." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Alibaba API: cloud Qwen TTS variants, including Alibaba Qwen provider models." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Use local models if you want offline generation after setup. Use API models if your PC is weak or you prefer cloud inference." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Simple vs Advanced Settings" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- Simple tab: output folder, model preset, subtitles, API keys, install/refresh for the active runtime." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Advanced tab: local model folder overrides, local device selection, LLM Script Prep setup, voice transcript editing, and Audio Enhancement runtime." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Most users should stay in Simple settings. Only use Advanced if you are changing local paths, using local LLM Script Prep, or managing extra runtime features." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="What The Project Saves" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- Project name, narrator voice, speed, style preset, and output folder." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Imported chapter file list for audiobook generation." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Queue/history restore data for generated chapter outputs." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Voice Design draft fields." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Prepared Script data for mixed voice or CustomVoice workflows." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Model files, cloned voices, generated WAV/MP3 output, and imported audio are stored as real files on disk. The project stores references and workflow state." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Voice Source Rules" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- Local presets use local voice WAV files or built-in local speaker workflows." />
+                                        <TextBlock TextWrapping="Wrap" Text="- OpenAI API preset switches Narrator Voice to OpenAI provider voices only." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Alibaba API preset switches generation to Alibaba provider models and voices/variants." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Mixed is a special narrator option for supported local workflows only." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="If a provider preset is selected, the active voice/model pipeline follows that provider instead of local WAV voice cloning." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Prepare Script (Mixed Voice)" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="Use Prepare Script when one chapter needs multiple voices or per-part control." />
+                                        <TextBlock Margin="0,4,0,0" TextWrapping="Wrap" Text="Workflow:" />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="1. Set Narrator Voice to Mixed on a supported model." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="2. Click Prepare for a chapter." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="3. Split into parts, assign a voice per part, and edit text directly in the part cards." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="4. Use Split Here or Ctrl+Enter at the text cursor to split one part into two." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="5. Use + Add Part to insert an empty part below the current one. Delete parts you do not need." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="6. Save, then generate normally." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="CustomVoice local workflow also enables an instruction prompt per part. Other mixed voice workflows use voice assignment only." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Per-part SFX override: check Disable auto SFX detection if you want to stop automatic sound-effect detection for that part and type your own manual Sound Effect prompt instead." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Generation runs part-first. A part is only sub-split again if it exceeds the active model limit." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="OpenAI/Alibaba mixed mode uses per-part voice assignment only. Instruction editing is only enabled for supported local CustomVoice workflow." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Voice Cloning" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- Record source audio or import an existing file and create a direct clone WAV file in Voice Cloning." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Import Voice accepts WAV directly and converts MP3 to WAV automatically." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Available Clone Voices list reads from the app voices folder." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Qwen VoiceDesign creates a new voice from text plus style prompt, without source audio." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Qwen CustomVoice local model uses its built-in speaker list instead of your local WAV clone list." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Clone voices are reusable assets. They are not stored inside the .abproj file; the project stores the selected voice reference." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="API Setup: OpenAI" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="1. Add OpenAI API key in Settings > API Settings." />
+                                        <TextBlock TextWrapping="Wrap" Text="2. Choose Model Preset = API - OpenAI TTS in Simple settings." />
+                                        <TextBlock TextWrapping="Wrap" Text="3. The app will fetch/use the OpenAI TTS model list for that preset." />
+                                        <TextBlock TextWrapping="Wrap" Text="4. Main screen Narrator Voice switches to OpenAI provider voices only." />
+                                        <TextBlock TextWrapping="Wrap" Text="5. OpenAI LLM Script Prep model lists are separate from OpenAI TTS models." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Fetched model lists are cached in app config. You should not need to fetch every session unless the provider list or your access changes." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="API Setup: Alibaba Qwen" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="1. Create DashScope API key in Alibaba Model Studio." />
+                                        <TextBlock TextWrapping="Wrap" Text="2. Choose Model Preset = API - Alibaba Qwen in Simple settings." />
+                                        <TextBlock TextWrapping="Wrap" Text="3. The app will fetch/use the Alibaba TTS model list for that preset. Available variants include:" />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="- Alibaba Cloud - Qwen3 TTS Flash (qwen3-tts-flash)." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="- Alibaba Cloud - Qwen3 TTS Instruct Flash (qwen3-tts-instruct-flash)." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="- Alibaba Cloud - Qwen3 TTS VC (qwen3-tts-vc-2026-01-22)." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="- Alibaba Cloud - Qwen VoiceDesign (qwen3-tts-vd-2026-01-26, create voice)." />
+                                        <TextBlock Margin="16,2,0,0" TextWrapping="Wrap" Text="- Alibaba Cloud - Qwen TTS Latest (qwen-tts-latest)." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="4. Keep Base URL as https://dashscope-intl.aliyuncs.com/api/v1" />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Voice cloning note: qwen3-tts-vc requires a cloud voice ID created through Alibaba voice enrollment/customization service." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="LLM Script Prep" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- LLM Script Prep chooses the split model and instruction model used by Prepare Script." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Local provider uses llama.cpp runtime and downloaded GGUF models." />
+                                        <TextBlock TextWrapping="Wrap" Text="- OpenAI and Alibaba can also be used for split/instruction generation if API keys are configured." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Locked instruction parts are preserved when regenerating instructions." />
+                                        <TextBlock TextWrapping="Wrap" Text="- Start LLM Server only appears for Local provider. API providers do not need the local server button." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="Prepare Script edits are saved into the project. The LLM server itself is runtime state and is stopped when the app closes." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Troubleshooting" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="- If a local model is not ready, check Settings for model/runtime checklist and install missing assets." />
+                                        <TextBlock TextWrapping="Wrap" Text="- If API generation fails, confirm the correct provider preset, API key, model selection, and voice selection are active together." />
+                                        <TextBlock TextWrapping="Wrap" Text="- If Play Sample is disabled, confirm the selected voice/provider actually supports preview in the current mode." />
+                                        <TextBlock TextWrapping="Wrap" Text="- If a project reopens with missing references, check whether the referenced files were moved or deleted outside the app." />
+                                        <TextBlock TextWrapping="Wrap" Text="- If queue summary says Done 0 while a row says Done (no cues), update to the latest build. Completed statuses now count correctly." />
+                                        <TextBlock TextWrapping="Wrap" Text="- If mixed-voice generation sounds wrong, reopen Prepare Script and verify the part text, assigned voice, and saved part order." />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Support" Margin="0,12,0,0">
+                                    <StackPanel Margin="8,4,8,8">
+                                        <TextBlock TextWrapping="Wrap" Text="Support contact is shown in the footer of the app." />
+                                        <TextBlock TextWrapping="Wrap" Text="Use the same support/contact section for your portfolio link, documentation updates, and customer contact details." />
+                                        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="#5B6661" Text="If you are preparing a public build, update the footer support text to your final public contact or portfolio page before packaging." />
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <Border Grid.Row="2" BorderBrush="#E1E6E3" BorderThickness="0,1,0,0" Padding="24,8,24,10" Background="#F4F6F5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="DetectedSystemText"
+                           Grid.Column="0"
+                           Foreground="#5B6661"
+                           FontSize="12"
+                           Text="Detected: -"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1"
+                           Margin="16,0,0,0"
+                           HorizontalAlignment="Right"
+                           Foreground="#5B6661"
+                           FontSize="12"
+                           VerticalAlignment="Center">
+                    <Run Text="Made by Elvlin © 2026 | " />
+                    <Hyperlink Click="PortfolioHyperlink_OnClick">elvlin.store</Hyperlink>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

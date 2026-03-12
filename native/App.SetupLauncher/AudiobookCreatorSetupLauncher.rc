@@ -1,0 +1,5 @@
+#define IDI_APP_ICON 101
+#define IDR_MANAGED_SETUP 201
+
+IDI_APP_ICON ICON "..\\..\\audiobook_creator_icon.ico"
+IDR_MANAGED_SETUP RCDATA "managed_setup_payload.bin"

@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.22.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\App.Core\App.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\customer_release\qwen3_tts_rust.dll"
+                      Link="Resources\qwen3_tts_rust.dll"
+                      LogicalName="App.Inference.Resources.qwen3_tts_rust.dll" />
+    <EmbeddedResource Include="Resources\qwen_python_worker.py"
+                      LogicalName="App.Inference.Resources.qwen_python_worker.py" />
+    <EmbeddedResource Include="Resources\chatterbox_python_runner.py"
+                      LogicalName="App.Inference.Resources.chatterbox_python_runner.py" />
+    <EmbeddedResource Include="Resources\kitten_python_runner.py"
+                      LogicalName="App.Inference.Resources.kitten_python_runner.py" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="tmpmeta\**\*.cs" />
+    <None Remove="tmpmeta\**\*" />
+    <EmbeddedResource Remove="tmpmeta\**\*" />
+  </ItemGroup>
+
+</Project>
+
+
+
+
